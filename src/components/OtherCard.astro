@@ -1,0 +1,31 @@
+---
+interface Props {
+	title: string;
+	body: string;
+	href: string;
+	imgUrl: string;
+	year: string;
+	month: string;
+}
+
+const { href, title, body, imgUrl, year, month } = Astro.props;
+---
+
+
+<div class="max-w-sm bg-dark rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+	</br>
+	<h5 class="mb-2 text-3xl text-purple-600 text-center">{month} - {year}</h5>
+	</br>
+	<a href="#">
+		<img src={imgUrl}  alt="" class="object-cover w-11/12 h-64 mx-auto rounded-lg border border-gray-1000"
+		 />
+	</a>
+	<div class="p-5">
+		<a href="#">
+			<h5 class="mb-2 text-3xl font-bold tracking-tight text-grey-900 dark:text-grey">{title}</h5>
+			
+		</a>
+		<p class="mb-3 font-normal text-white-700 ">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+	</div>
+</div>
+

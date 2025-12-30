@@ -1,0 +1,11 @@
+services:
+  astro-app:
+    build: .
+    container_name: mi-proyecto-astro
+    ports:
+      - "4321:4321"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development

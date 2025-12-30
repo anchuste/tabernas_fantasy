@@ -15,6 +15,12 @@ import Card from '../components/Card.astro';
 		<img src="/nflFantasy.png" alt="NFL logo" style="width: 100px; height: 225; border-radius: 10px; margin-left: auto;
     		margin-right: auto; margin-bottom:1em"/>
 		</div>
+
+		<p class="instructions_champion">
+			
+		<img src=`../fantasy_icons/RR Thunders.png` alt="" class="h-16 w-16" style="border-radius: 8px;">
+			Campeón 2025-2026 - RR Thunders - ¡¡Enhorabuena!! 🖤🖤
+		</p>
 		
 		<p class="instructions">
 			Palmarés histórico 🏆🏆🏆
@@ -31,8 +37,7 @@ import Card from '../components/Card.astro';
 		<Card year='2022-23' team='Mellieha Cats'/>
 		<Card year='2023-24' team='Voidminghan'/>
 		<Card year='2024-25' team='Euro49ers'/>
-		
-		
+		<Card year='2025-26' team='RR Thunders'/>
 	</main>
 </Layout>
 
@@ -93,4 +98,12 @@ import Card from '../components/Card.astro';
 		gap: 2rem;
 		padding: 0;
 	}
+
+	.instructions_champion {
+	margin-bottom: 2rem;
+	border: 1px solid rgba(50, 50, 50, 0.5);
+	background: linear-gradient(rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.8));
+	padding: 1.5rem;
+	border-radius: 8px;
+}
 </style>

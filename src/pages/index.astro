@@ -2,7 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 import OtherCard from '../components/OtherCard.astro';
 import Card from '../components/Card.astro';
+import { supabase } from '../lib/supabase';
+const { data, error } = await supabase
+  .from("palmares")
+  .select('*')
+  .order('year', { ascending: true }); 
 ---
+
 
 <Layout title="Palmarés Tabernas Fantasy">
 	<main>
@@ -26,18 +32,11 @@ import Card from '../components/Card.astro';
 			Palmarés histórico 🏆🏆🏆
 		</p>
 
-		<Card year='2013-14' team='RR Thunders'/>
-		<Card year='2014-15' team='Empacadores GB'/>
-		<Card year='2015-16' team='Penes Broncos'/>
-		<Card year='2016-17' team='Euro49ers'/>
-		<Card year='2018-19' team='Empacadores GB'/>
-		<Card year='2019-20' team='Euro49ers'/>
-		<Card year='2020-21' team='RR Thunders'/>
-		<Card year='2021-22' team='Mellieha Cats'/>
-		<Card year='2022-23' team='Mellieha Cats'/>
-		<Card year='2023-24' team='Voidminghan'/>
-		<Card year='2024-25' team='Euro49ers'/>
-		<Card year='2025-26' team='RR Thunders'/>
+		
+  			{data?.map(item => (
+    		<Card year={item.year} team={item.team_name} />
+  			))}
+
 	</main>
 </Layout>
 

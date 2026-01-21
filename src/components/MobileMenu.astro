@@ -1,0 +1,96 @@
+---
+// src/components/MobileMenu.astro
+---
+
+<nav class="mobile-nav">
+  <button class="menu-toggle" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  
+  <ul class="menu-items">
+    <li><a href="/">Inicio</a></li>
+    <li><a href="/palmares">Palmarés</a></li>
+    <li><a href="/estadisticas">Estadísticas</a></li>
+    <li><a href="/equipos">Equipos</a></li>
+  </ul>
+</nav>
+
+<style>
+  .mobile-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(23, 25, 35, 0.95);
+    z-index: 1000;
+    padding: 1rem;
+  }
+
+  .menu-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0.5rem;
+  }
+
+  .menu-toggle span {
+    width: 30px;
+    height: 3px;
+    background: white;
+    transition: all 0.3s;
+    border-radius: 3px;
+  }
+
+  .menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+  }
+
+  .menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+  }
+
+  .menu-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s;
+  }
+
+  .menu-items.active {
+    max-height: 400px;
+    margin-top: 1rem;
+  }
+
+  .menu-items a {
+    display: block;
+    padding: 1rem;
+    color: white;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .menu-items a:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+</style>
+
+<script>
+  const menuToggle = document.querySelector('.menu-toggle');
+  const menuItems = document.querySelector('.menu-items');
+
+  menuToggle?.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    menuItems?.classList.toggle('active');
+  });
+</script>

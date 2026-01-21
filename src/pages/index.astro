@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import OtherCard from '../components/OtherCard.astro';
 import Card from '../components/Card.astro';
+import MobileMenu from '../components/MobileMenu.astro';
 import { supabase } from '../lib/supabase';
 const { data, error } = await supabase
   .from("palmares")
@@ -11,20 +11,19 @@ const { data, error } = await supabase
 
 
 <Layout title="Palmarés Tabernas Fantasy">
-	<main>
-
+	<MobileMenu />
+	
+	<main style="margin-top: 80px;">
 		<h1 style="margin-bottom: 0.5em;">
-			<span class="text-gradient" style="font-size: 0.75em; ma">Tabernas Fantasy</span>
+			<span class="text-gradient" style="font-size: 0.75em;">Tabernas Fantasy</span>
 		</h1>
 
 		<div>
-		<img src="/nflFantasy.png" alt="NFL logo" style="width: 100px; height: 225; border-radius: 10px; margin-left: auto;
-    		margin-right: auto; margin-bottom:1em"/>
+			<img src="/nflFantasy.png" alt="NFL logo" style="width: 140px; height: 225px; border-radius: 10px; margin-left: auto; margin-right: auto; margin-bottom:1em"/>
 		</div>
 
 		<p class="instructions_champion">
-			
-		<img src=`../fantasy_icons/RR Thunders.png` alt="" class="h-16 w-16" style="border-radius: 8px;">
+			<img src="../fantasy_icons/RR Thunders.png" alt="" class="h-16 w-16" style="border-radius: 8px;">
 			Campeón 2025-2026 - RR Thunders - ¡¡Enhorabuena!! 🖤🖤
 		</p>
 		
@@ -32,11 +31,9 @@ const { data, error } = await supabase
 			Palmarés histórico 🏆🏆🏆
 		</p>
 
-		
-  			{data?.map(item => (
-    		<Card year={item.year} team={item.team_name} />
-  			))}
-
+		{data?.map(item => (
+			<Card year={item.year} team={item.team_name} />
+		))}
 	</main>
 </Layout>
 

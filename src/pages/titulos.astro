@@ -1,0 +1,179 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TitleCard from '../components/TitleCard.astro';
+import MobileMenu from '../components/MobileMenu.astro';
+import { supabase } from '../lib/supabase';
+const { data, error } = await supabase.rpc('get_team_counts');
+
+// Agrupar por número de títulos
+const groupedByTitles = data?.reduce((acc, item) => {
+  if (!acc[item.title]) {
+    acc[item.title] = [];
+  }
+  acc[item.title].push(item);
+  return acc;
+}, {});
+
+// Convertir a array y ordenar por títulos descendente
+const sortedGroups = Object.entries(groupedByTitles || {})
+  .sort(([a], [b]) => Number(b) - Number(a));
+
+---
+
+
+<Layout title="Títulos por equipo">
+	<MobileMenu />
+	
+	<main style="margin-top: 80px;">
+		<h1 style="margin-bottom: 0.5em;">
+			<span class="text-gradient" style="font-size: 0.75em;">Tabernas Fantasy</span>
+		</h1>
+
+		<div>
+			<img src="/nflFantasy.png" alt="NFL logo" style="width: 140px; height: 225px; border-radius: 10px; margin-left: auto; margin-right: auto; margin-bottom:1em"/>
+		</div>
+
+		{sortedGroups.map(([titleCount, teams], index) => (
+    <>
+
+
+		<p class={Number(titleCount) >= 3 ? "champions-banner champions-text" : "instructions"}>
+  {Number(titleCount) >= 3 ? (
+    <>
+      👑 Los Reyes — 
+      <span class="title-count">{titleCount}</span> {Number(titleCount) === 1 ? "Título" : "Títulos"}
+      <span class="trophies trophies-champion">{'🏆'.repeat(Number(titleCount))}</span>
+    </>
+  ) : (
+    <>
+      {titleCount} {Number(titleCount) === 1 ? " Título" : " Títulos"} 
+      <span class="trophies">{'🏆'.repeat(Number(titleCount))}</span>
+    </>
+  )}
+</p>
+
+      {teams.map(item => (
+        <TitleCard title={item.title} team={item.team_name} />
+      ))}
+      {index < sortedGroups.length - 1 && (
+        <hr style="margin: 2rem 0; border: 1px solid rgba(255, 255, 255, 0.2);" />
+      )}
+    </>
+  ))}
+	</main>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1rem;
+		width: 800px;
+		max-width: calc(100% - 2rem);
+		color: white;
+		font-size: 20px;
+		line-height: 1.6;
+	}
+	.astro-a {
+		position: absolute;
+		top: -32px;
+		left: 50%;
+		transform: translatex(-50%);
+		width: 220px;
+		height: auto;
+		z-index: -1;
+	}
+	h1 {
+		font-size: 4rem;
+		font-weight: 700;
+		line-height: 1;
+		text-align: center;
+		margin-bottom: 1em;
+	}
+	.text-gradient {
+		background-image: var(--accent-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 400%;
+		background-position: 0%;
+	}
+	.instructions {
+		margin-bottom: 2rem;
+		border: 1px solid rgba(var(--accent-light), 25%);
+		background: linear-gradient(rgba(var(--accent-dark), 66%), rgba(var(--accent-dark), 33%));
+		padding: 1.5rem;
+		border-radius: 8px;
+	}
+	.instructions code {
+		font-size: 0.8em;
+		font-weight: bold;
+		background: rgba(var(--accent-light), 12%);
+		color: rgb(var(--accent-light));
+		border-radius: 4px;
+		padding: 0.3em 0.4em;
+	}
+	.instructions strong {
+		color: rgb(var(--accent-light));
+	}
+	.link-card-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+		gap: 2rem;
+		padding: 0;
+	}
+
+	.instructions_champion {
+	margin-bottom: 2rem;
+	border: 1px solid rgba(50, 50, 50, 0.5);
+	background: linear-gradient(rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.8));
+	padding: 1.5rem;
+	border-radius: 8px;
+	}
+
+	/* Banner campeón */
+.champions-banner {
+  margin-bottom: 2rem;
+  border: 2px solid rgba(255, 215, 0, 0.7);
+  padding: 1.5rem;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,215,0,0.12), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255,215,0,0.10), transparent 40%),
+    linear-gradient(rgba(var(--accent-dark), 90%), rgba(var(--accent-dark), 70%));
+  box-shadow:
+    0 0 10px rgba(255, 215, 0, 0.25),
+    inset 0 0 8px rgba(255, 215, 0, 0.15);
+  display: inline-block;
+}
+
+/* Texto destacado campeón */
+.champions-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Número de títulos grande y dorado */
+.title-count {
+  font-size: 1.6rem;
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+/* Copas */
+.trophies {
+  margin-left: 0.5rem;
+}
+
+.trophies-champion {
+  animation: pop 1.2s ease-in-out infinite alternate;
+  display: inline-block;
+}
+
+/* Animación pop para copas campeonas */
+@keyframes pop {
+  from { transform: scale(1); }
+  to { transform: scale(1.12); }
+}
+</style>

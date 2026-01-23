@@ -1,0 +1,25 @@
+---
+interface Props {
+	team: string;
+	title: number;
+	imgUrl?: string;
+}
+
+const { team, imgUrl, title } = Astro.props;
+---
+
+<a class="flex border items-center rounded-md cursor-pointer transition duration-500 shadow-sm hover:shadow-md hover:shadow-teal-400 mb-1.5">
+<div class="w-16 p-2 shrink-0">
+	<img src=`../fantasy_icons/${team}.png` alt="" class="h-12 w-12" style="border-radius: 3px;">
+</div>
+<div class="p-2">
+	<p class="font-semibold text-lg">
+  		{team}
+	</p>
+</div>
+</a>
+<style>
+	@tailwind base;
+	@tailwind components;
+	@tailwind utilities;
+</style>

@@ -6,13 +6,15 @@ import { supabase } from '../lib/supabase';
 const { data, error } = await supabase.rpc('get_team_counts');
 
 // Agrupar por número de títulos
-const groupedByTitles = data?.reduce((acc, item) => {
-  if (!acc[item.title]) {
-    acc[item.title] = [];
-  }
-  acc[item.title].push(item);
-  return acc;
-}, {});
+const groupedByTitles = data?.reduce(
+	(acc, item) => {
+  		if (!acc[item.title]) {
+    		acc[item.title] = [];
+  		}
+  		acc[item.title].push(item);
+  		return acc;
+	}, {}
+);
 
 // Convertir a array y ordenar por títulos descendente
 const sortedGroups = Object.entries(groupedByTitles || {})
@@ -33,32 +35,48 @@ const sortedGroups = Object.entries(groupedByTitles || {})
 			<img src="/nflFantasy.png" alt="NFL logo" style="width: 140px; height: 225px; border-radius: 10px; margin-left: auto; margin-right: auto; margin-bottom:1em"/>
 		</div>
 
-		{sortedGroups.map(([titleCount, teams], index) => (
-    <>
+		{/* Mensaje de error o sin datos */}
+		{(error || !data || data.length === 0) && (
+			<div class="error-message">
+				<p>⚠️ No se pudieron cargar los datos</p>
+				<p class="error-detail">
+					{error 
+						? 'Error de conexión con la base de datos. Por favor, intenta recargar la página.' 
+						: 'No hay títulos registrados todavía.'}
+				</p>
+			</div>
+		)}
 
+		{sortedGroups.map(([titleCount, teams], index) => (
+
+    	<>
 
 		<p class={Number(titleCount) >= 3 ? "champions-banner champions-text" : "instructions"}>
-  {Number(titleCount) >= 3 ? (
-    <>
-      👑 Los Reyes — 
-      <span class="title-count">{titleCount}</span> {Number(titleCount) === 1 ? "Título" : "Títulos"}
-      <span class="trophies trophies-champion">{'🏆'.repeat(Number(titleCount))}</span>
-    </>
-  ) : (
-    <>
-      {titleCount} {Number(titleCount) === 1 ? " Título" : " Títulos"} 
-      <span class="trophies">{'🏆'.repeat(Number(titleCount))}</span>
-    </>
-  )}
-</p>
 
-      {teams.map(item => (
-        <TitleCard title={item.title} team={item.team_name} />
-      ))}
-      {index < sortedGroups.length - 1 && (
-        <hr style="margin: 2rem 0; border: 1px solid rgba(255, 255, 255, 0.2);" />
-      )}
-    </>
+  		{Number(titleCount) >= 3 ? (
+
+    	<>
+			👑 Los Reyes — 
+			<span class="title-count">{titleCount}</span> Títulos
+			<span class="trophies trophies-champion">{'🏆'.repeat(Number(titleCount))}</span>
+    	</>
+		) : (
+			<>
+			{titleCount} {Number(titleCount) === 1 ? " Título" : " Títulos"} 
+			<span class="trophies">{'🏆'.repeat(Number(titleCount))}</span>
+			</>
+		)}
+		</p>
+
+		{teams.map(item => (
+			<TitleCard title={item.title} team={item.team_name} />
+		))}
+		
+		{index < sortedGroups.length - 1 && (
+			<hr style="margin: 2rem 0; border: 1px solid rgba(255, 255, 255, 0.2);" />
+		)}
+	
+    	</>
   ))}
 	</main>
 </Layout>
@@ -175,4 +193,35 @@ const sortedGroups = Object.entries(groupedByTitles || {})
   from { transform: scale(1); }
   to { transform: scale(1.12); }
 }
+
+/* Mensaje de error */
+.error-message {
+	background: linear-gradient(rgba(200, 0, 0, 0.4), rgba(150, 0, 0, 0.3));
+	border: 2px solid rgba(255, 50, 50, 0.8);
+	border-radius: 8px;
+	padding: 2rem;
+	text-align: center;
+	margin: 2rem 0;
+	box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+}
+
+.error-message p {
+	margin: 0.5rem 0;
+	font-size: 1.2rem;
+	color: #ff6b6b;
+	font-weight: 600;
+}
+
+.error-message p:first-child {
+	font-size: 1.5rem;
+	color: #ff4444;
+	font-weight: 700;
+}
+
+.error-detail {
+	font-size: 1rem !important;
+	color: rgba(255, 200, 200, 0.9) !important;
+	font-weight: 400 !important;
+}
+
 </style>
